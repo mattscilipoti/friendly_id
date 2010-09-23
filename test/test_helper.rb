@@ -7,6 +7,7 @@ $VERBOSE = false
 require "rubygems"
 require "bundler/setup"
 require "test/unit"
+require 'redgreen'
 require "mocha"
 require "active_support"
 require "friendly_id"
