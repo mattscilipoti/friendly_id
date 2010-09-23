@@ -94,6 +94,11 @@ module FriendlyId
         assert_equal instance, klass.send(find_method, "206")
       end
 
+      test "instances should be findable by their friendly_id_column" do
+        instance = klass.send(create_method, :name => "Henry Ford")
+        assert_equal instance, klass.send(find_method, "Henry Ford")
+      end
+
       test "creation should raise an error if the friendly_id text is reserved" do
         assert_validation_error do
           klass.send(create_method, :name => "new")

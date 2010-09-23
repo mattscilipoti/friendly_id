@@ -21,12 +21,14 @@ module FriendlyId
 
         def find_one
           if fc.cache_column? && !fc.scope?
-            find_one_with_cached_slug
+            @result = find_one_with_cached_slug || find_one_with_slug
           elsif fc.use_slugs?
-            find_one_with_slug
-          else
-            find_one_without_slug
+            @result = find_one_with_slug
           end
+          unless @result
+            @result = find_one_with_friendly_id_column || find_one_without_friendly_id
+          end
+          assign_status
         end
 
         def find_some
@@ -56,14 +58,12 @@ module FriendlyId
           @result
         end
 
-        def find_one_without_slug
-          @result = where(fc.column => id).first
-          assign_status
+        def find_one_with_friendly_id_column
+          where(fc.column => id).first
         end
 
         def find_one_with_cached_slug
-          @result = where(fc.cache_column => id).first
-          assign_status or find_one_with_slug
+          where(fc.cache_column => id).first
         end
 
         def find_one_with_slug
@@ -74,9 +74,11 @@ module FriendlyId
             record.friendly_id_status.name     = name
             record.friendly_id_status.sequence = seq
             record
-          else
-            relation.send(:find_one_without_friendly, id)
           end
+        end
+
+        def find_one_without_friendly_id
+          relation.send(:find_one_without_friendly, id)
         end
 
         def friendly_records(friendly_ids, unfriendly_ids)
