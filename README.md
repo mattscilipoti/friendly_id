@@ -1,15 +1,3 @@
-# This is a fork!
-We forked friendly_id in order to allow #find
-to locate a model by friendly_id_column,
-even if it is cached or :use_slug => true.
-
-For instance:
-    User has_friendly_id :user_name,:use_slug => true
-    u =User.create!(:user_name => "Henry Ford")
-    User.find(1) --> works
-    User.find('henry-ford") --> works
-    User.find('Henry Ford") --> ActiveRecord::RecordNotFound: Couldn't find User with ID=Henry Ford
-
 # FriendlyId
 
 FriendlyId is the "Swiss Army bulldozer" of slugging and permalink plugins for
